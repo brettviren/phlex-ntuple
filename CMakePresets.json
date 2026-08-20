@@ -1,0 +1,43 @@
+{
+  "version": 3,
+  "configurePresets": [
+    {
+      "name": "base",
+      "hidden": true,
+      "description": "Shared settings",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "cacheVariables": {
+        "CMAKE_CXX_STANDARD":          { "type": "STRING", "value": "23" },
+        "CMAKE_CXX_STANDARD_REQUIRED": { "type": "BOOL",   "value": "ON" },
+        "CMAKE_CXX_EXTENSIONS":        { "type": "BOOL",   "value": "OFF" },
+
+        "_comment_compiler": "Pin the Spack GCC 15 toolchain via $CC/$CXX (as the umbrella .envrc sets). Arrow in the Spack view is built with GCC 15; use one compiler throughout.",
+        "CMAKE_C_COMPILER":   { "type": "FILEPATH", "value": "$env{CC}" },
+        "CMAKE_CXX_COMPILER": { "type": "FILEPATH", "value": "$env{CXX}" },
+
+        "_comment_prefix": "The Spack view provides Arrow. The umbrella script (./umbrella config arrow-ntuple) is the primary build path and sets this for you; this preset honours an ambient CMAKE_PREFIX_PATH for direct cmake use.",
+        "CMAKE_PREFIX_PATH": { "type": "STRING", "value": "$env{CMAKE_PREFIX_PATH}" }
+      }
+    },
+    {
+      "name": "default",
+      "displayName": "Default (RelWithDebInfo)",
+      "inherits": "base",
+      "cacheVariables": { "CMAKE_BUILD_TYPE": { "type": "STRING", "value": "RelWithDebInfo" } }
+    },
+    {
+      "name": "debug",
+      "displayName": "Debug",
+      "inherits": "base",
+      "cacheVariables": { "CMAKE_BUILD_TYPE": { "type": "STRING", "value": "Debug" } }
+    }
+  ],
+  "buildPresets": [
+    { "name": "default", "configurePreset": "default" },
+    { "name": "debug",   "configurePreset": "debug" }
+  ],
+  "testPresets": [
+    { "name": "default", "configurePreset": "default", "output": { "outputOnFailure": true } },
+    { "name": "debug",   "configurePreset": "debug",   "output": { "outputOnFailure": true } }
+  ]
+}
