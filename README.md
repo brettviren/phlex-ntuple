@@ -71,7 +71,12 @@ ctest --test-dir builds/envs/gcc15/phlex-ntuple --output-on-failure
 ```
 
 Tests: `provenance` and `accumulator` (Arrow + phlex::model only), plus
-`graph_roundtrip` — a real producer→fold→output `framework_graph` run
-concurrently, writing an HDF5 file whose per-run tables carry correct per-row
-provenance (the last is skipped if arrow-hdf / HDF5 / the phlex source tree are
-unavailable).
+`graph_roundtrip` — a real producer→fold→output graph (two test plugins under
+`test/graph/`, run by the `phlex` program over `graph_roundtrip.jsonnet`)
+executed concurrently, writing an HDF5 file whose per-run tables carry correct
+per-row provenance, then checked by `test_graph_verify` (skipped if arrow-hdf /
+HDF5 / the `phlex` executable are unavailable).  Only public Phlex API is used.
+
+Requires Phlex >= 0.4.1.  Note that Phlex 0.4 only applies a fold-result
+`send(T const&)` (a non-const `send(T&)` is silently ignored and the
+accumulator itself becomes the product).

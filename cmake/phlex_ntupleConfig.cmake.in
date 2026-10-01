@@ -6,10 +6,7 @@
 
 include(CMakeFindDependencyMacro)
 find_dependency(Arrow)
-find_dependency(Boost)
-find_dependency(spdlog)
-find_dependency(TBB)
-find_dependency(phlex)
+find_dependency(phlex 0.4.1)
 find_dependency(arrow_ntuple)
 find_dependency(phlex_arrow_common)
 

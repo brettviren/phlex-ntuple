@@ -21,14 +21,9 @@ add_compile_options(-Wall -Wpedantic -Werror)
 # --- dependencies -----------------------------------------------------------
 find_package(Arrow CONFIG REQUIRED)
 
-# phlex's Config does not find_dependency() its transitive imported targets
-# (Boost, spdlog->fmt, TBB), yet phlexTargets references them; create them
-# first (same workaround as the sibling phlex-arrow-* packages).
-find_package(Boost REQUIRED)
-find_package(spdlog REQUIRED)
-find_package(fmt REQUIRED)
-find_package(TBB REQUIRED)
-find_package(phlex REQUIRED)
+# phlex >= 0.4.1 (its config find_dependency()s Boost/TBB/fmt/spdlog/GSL).
+find_package(phlex 0.4.1 REQUIRED)
+include(GNUInstallDirs)
 
 find_package(arrow_ntuple CONFIG REQUIRED)
 find_package(phlex_arrow_common CONFIG REQUIRED)

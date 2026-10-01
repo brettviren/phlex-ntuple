@@ -91,10 +91,17 @@ void fold_step(accumulator<S>& acc, phlex::handle<S> h)
 
 /// Fold-result conversion (found by ADL at the fold's commit): turn the
 /// accumulator into its TableGroup product.
+///
+/// Phlex >= 0.4 only recognizes `send(T const&)` (phlex::experimental::has_send
+/// in phlex/core/fold/send.hpp); with a non-const parameter the accumulator
+/// itself would silently become the fold's product.  Phlex calls send() once,
+/// on the finished partition's accumulator, which it owns as a non-const
+/// object and discards right after -- so finishing (mutating) it through
+/// const_cast is well-defined and is the intended one-shot hand-off.
 template <typename S>
-phlex_arrow::TableGroup send(accumulator<S>& acc)
+phlex_arrow::TableGroup send(accumulator<S> const& acc)
 {
-    return acc.table_group();
+    return const_cast<accumulator<S>&>(acc).table_group();
 }
 
 }  // namespace phlex_ntuple
